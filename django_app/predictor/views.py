@@ -67,33 +67,33 @@ def predict_api(request):
     if request.method == "POST":
         try:
             # Parse JSON body
-            data = json.loads(request.body)
+           data = json.loads(request.body)
 
            input_df = pd.DataFrame([{}])
            input_df = input_df.reindex(columns=columns, fill_value=0)
 
             # Numeric features
-            numeric_fields = ["tenure", "MonthlyCharges", "TotalCharges"]
-            for field in numeric_fields:
+           numeric_fields = ["tenure", "MonthlyCharges", "TotalCharges"]
+           for field in numeric_fields:
                 value = data.get(field)
                 if value is not None:
                     input_df[field] = float(value)
             # categorical encoding
-            for col in columns:
+           for col in columns:
                 if "_" in col:
                     base, value = col.split("_", 1)
                     if data.get(base) == value:
                         input_df[col] = 1
 
             # Prediction
-            features_scaled = scaler.transform(input_df)
+           features_scaled = scaler.transform(input_df)
 
-            prediction = int(model.predict(features_scaled)[0])
-            proba = float(model.predict_proba(features_scaled)[0][1])
+           prediction = int(model.predict(features_scaled)[0])
+           proba = float(model.predict_proba(features_scaled)[0][1])
 
-            result = "Will Churn ❌" if prediction == 1 else "Will Stay ✅"
+           result = "Will Churn ❌" if prediction == 1 else "Will Stay ✅"
 
-            return JsonResponse({
+           return JsonResponse({
                 "prediction": prediction,
                 "result": result,
                 "probability": round(proba, 4)

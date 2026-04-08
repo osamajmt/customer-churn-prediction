@@ -1,0 +1,8 @@
+Django>=4.0
+fastapi
+uvicorn
+scikit-learn
+pandas
+numpy
+joblib
+pydantic
